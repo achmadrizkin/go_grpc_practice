@@ -1,0 +1,1 @@
+protoc -I proto/ proto/book.proto --go_out=plugins=grpc:v1_book_grpc/
