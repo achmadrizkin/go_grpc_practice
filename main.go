@@ -1,13 +1,13 @@
 package main
 
 import (
-	"context"
 	"fmt"
 	"log"
 	"net"
 	"os"
 	"os/signal"
 
+	"go_grpc_practice/server"
 	pb "go_grpc_practice/v1_book_grpc"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -15,31 +15,28 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-// membuat struct server
-// untuk mengimplementasikan rpc GetBook
-type server struct {
-}
-
 // implementasi rpc dengan nama GetBook
-func (*server) GetBook(ctx context.Context, req *pb.GetBookRequest) (*pb.GetBookResponse, error) {
-	// menerima request
-	bookReq := req.Book
+//
+// -- GRPC 1 Practice
+// func (*server) GetBook(ctx context.Context, req *pb.GetBookRequest) (*pb.GetBookResponse, error) {
+// 	// menerima request
+// 	bookReq := req.Book
 
-	// mengolah hasil dari request
-	book := pb.Book{
-		Id:     bookReq.Id,
-		Title:  bookReq.Title,
-		Author: bookReq.Author,
-		IsRead: false,
-	}
+// 	// mengolah hasil dari request
+// 	book := pb.Book{
+// 		Id:     bookReq.Id,
+// 		Title:  bookReq.Title,
+// 		Author: bookReq.Author,
+// 		IsRead: false,
+// 	}
 
-	// mengirim respons
-	return &pb.GetBookResponse{
-		Status: true,
-		Data:   &book,
-	}, nil
+// 	// mengirim respons
+// 	return &pb.GetBookResponse{
+// 		Status: true,
+// 		Data:   &book,
+// 	}, nil
 
-}
+// }
 
 func main() {
 	// jika kode mengalami crash, nomor line akan ditampilkan
@@ -54,12 +51,7 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	// melakukan register BookServiceServer
-
-	pb.RegisterBookServiceServer(s, &server{}) // EROR disininnya
-
-	// mengaktifkan reflection
-	// agar bisa digunakan untuk pengujian dengan evans
+	pb.RegisterBookServiceServer(s, &server.Server{})
 	reflection.Register(s)
 
 	go func() {

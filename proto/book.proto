@@ -10,8 +10,30 @@ message Book {
 }
 
 message GetBookRequest { 
-  Book book = 1; 
+  string id = 1;
 }
+
+message AddBookRequest {
+  Book book = 1;
+}
+
+message AddBookResponse {
+  bool status = 1;
+  Book data = 2;
+}
+
+message UpdateBookRequest {
+  Book book = 1;
+}
+
+message UpdateBookResponse {
+  bool status = 1;
+  Book data = 2;
+}
+
+message DeleteBookRequest { string book_id = 1; }
+
+message DeleteBookResponse { bool status = 1; }
 
 message GetBookResponse {
   bool status = 1;
@@ -20,4 +42,7 @@ message GetBookResponse {
 
 service BookService {
   rpc GetBook(GetBookRequest) returns (GetBookResponse) {};
+  rpc AddBook(AddBookRequest) returns (AddBookResponse) {};
+  rpc UpdateBook(UpdateBookRequest) returns (UpdateBookResponse) {};
+  rpc DeleteBook(DeleteBookRequest) returns (DeleteBookResponse) {};
 }
